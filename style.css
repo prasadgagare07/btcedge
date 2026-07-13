@@ -1,0 +1,40 @@
+body{
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:20px;
+}
+
+h1{
+    text-align:center;
+}
+
+.card{
+    background:#222;
+    border-radius:12px;
+    padding:15px;
+    margin-bottom:15px;
+}
+
+#price{
+    font-size:36px;
+    font-weight:bold;
+}
+
+#buy{
+    color:#00ff66;
+    font-size:24px;
+    font-weight:bold;
+}
+
+#sell{
+    color:#ff4444;
+    font-size:24px;
+    font-weight:bold;
+}
+
+#delta{
+    color:orange;
+    font-size:26px;
+    font-weight:bold;
+}
