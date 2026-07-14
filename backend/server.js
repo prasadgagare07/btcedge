@@ -65,4 +65,26 @@ function calculate(seconds) {
     sell: Math.round(sell),
     delta: Math.round(buy - sell),
     ratio: buy + sell > 0 ? ((buy / (buy + sell)) * 100).toFixed(1) : "0.0",
-    largestBuy:
+    largestBuy: Math.round(largestBuy),
+  largestSell: Math.round(largestSell)
+};
+}
+
+app.get("/api/dashboard", (req, res) => {
+  res.json({
+    price: currentPrice,
+    s30: calculate(30),
+    m1: calculate(60),
+    m3: calculate(180),
+    m5: calculate(300),
+    m10: calculate(600)
+  });
+});
+
+app.get("/", (req, res) => {
+  res.send("BTC Edge Backend Running");
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
