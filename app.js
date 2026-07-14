@@ -1,25 +1,29 @@
 const API = "https://btcedge-3.onrender.com/api/dashboard";
 
-const priceEl = document.getElementById("price");
-const buyEl = document.getElementById("buy");
-const sellEl = document.getElementById("sell");
-const deltaEl = document.getElementById("delta");
-
 async function update() {
   try {
     const res = await fetch(API);
     const data = await res.json();
 
-    priceEl.textContent = "$" + Number(data.price).toFixed(2);
+    document.getElementById("price").innerText =
+      "$" + Number(data.price).toFixed(2);
 
-    buyEl.textContent =
-      "$" + Number(data.m1.buy).toLocaleString();
+    function show(prefix, obj) {
+      document.getElementById("buy" + prefix).innerText =
+        "$" + Number(obj.buy).toLocaleString();
 
-    sellEl.textContent =
-      "$" + Number(data.m1.sell).toLocaleString();
+      document.getElementById("sell" + prefix).innerText =
+        "$" + Number(obj.sell).toLocaleString();
 
-    deltaEl.textContent =
-      "$" + Number(data.m1.delta).toLocaleString();
+      document.getElementById("delta" + prefix).innerText =
+        "$" + Number(obj.delta).toLocaleString();
+    }
+
+    show("30", data.s30);
+    show("1", data.m1);
+    show("3", data.m3);
+    show("5", data.m5);
+    show("10", data.m10);
 
   } catch (err) {
     console.error(err);
