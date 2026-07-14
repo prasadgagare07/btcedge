@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: btc-edge-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
