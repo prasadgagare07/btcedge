@@ -12,28 +12,42 @@ let currentPrice = 0;
 // Keep only the last 10 minutes of trades
 const trades = [];
 
-const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+//const //ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+const ws = new WebSocket("wss://ws-feed.exchange.coinbase.com");
+
+/*ws.on("open", () => {
+  console.log("Connected to Binance");
+});*/
 
 ws.on("open", () => {
-  console.log("Connected to Binance");
+  console.log("Connected to Coinbase");
+
+  ws.send(JSON.stringify({
+    type: "subscribe",
+    product_ids: ["BTC-USD"],
+    channels: ["matches"]
+  }));
 });
 
 ws.on("message", (msg) => {
   const t = JSON.parse(msg);
 
-  const price = parseFloat(t.p);
-  const qty = parseFloat(t.q);
+  // Ignore non-trade messages
+  if (t.type !== "match") return;
+
+  const price = parseFloat(t.price);
+  const qty = parseFloat(t.size);
   const value = price * qty;
 
   currentPrice = price;
 
   trades.push({
     time: Date.now(),
-    side: t.m ? "sell" : "buy",
+    side: t.side, // "buy" or "sell"
     value
   });
 
-  // Remove trades older than 10 minutes
+  // Keep only the last 10 minutes
   const cutoff = Date.now() - 10 * 60 * 1000;
   while (trades.length && trades[0].time < cutoff) {
     trades.shift();
