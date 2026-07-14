@@ -1,3 +1,5 @@
+const API = "https://btcedge-3.onrender.com/api/dashboard";
+
 let buy = 0;
 let sell = 0;
 
