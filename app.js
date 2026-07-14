@@ -1,33 +1,30 @@
 const API = "https://btcedge-3.onrender.com/api/dashboard";
 
-let buy = 0;
-let sell = 0;
-
 const priceEl = document.getElementById("price");
 const buyEl = document.getElementById("buy");
 const sellEl = document.getElementById("sell");
 const deltaEl = document.getElementById("delta");
 
-const ws = new WebSocket("wss://stream.binance.com:9443/ws/btcusdt@trade");
+async function update() {
+  try {
+    const res = await fetch(API);
+    const data = await res.json();
 
-ws.onmessage = (event) => {
-    const trade = JSON.parse(event.data);
+    priceEl.textContent = "$" + Number(data.price).toFixed(2);
 
-    const price = parseFloat(trade.p);
-    const qty = parseFloat(trade.q);
-    const value = price * qty;
+    buyEl.textContent =
+      "$" + Number(data.m1.buy).toLocaleString();
 
-    priceEl.textContent = "$" + price.toFixed(2);
+    sellEl.textContent =
+      "$" + Number(data.m1.sell).toLocaleString();
 
-    if (trade.m) {
-        sell += value;
-    } else {
-        buy += value;
-    }
+    deltaEl.textContent =
+      "$" + Number(data.m1.delta).toLocaleString();
 
-    buyEl.textContent = "$" + Math.round(buy).toLocaleString();
-    sellEl.textContent = "$" + Math.round(sell).toLocaleString();
+  } catch (err) {
+    console.error(err);
+  }
+}
 
-    const delta = buy - sell;
-    deltaEl.textContent = "$" + Math.round(delta).toLocaleString();
-};
+update();
+setInterval(update, 1000);
